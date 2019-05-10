@@ -17,7 +17,18 @@
 
 <script>
 export default {
-  props: ["icon", "iconPosition"]
+  // props: ["icon", "iconPosition"]
+  props: {
+    icon: {},
+    iconPosition: {
+      type: String,
+      default: 'left',
+      validator (value) {
+        //防止有人传过来的值，不是left或right
+        return !(value !== 'left' && value !== 'right')
+      }
+    }
+  }
 };
 </script>
 
