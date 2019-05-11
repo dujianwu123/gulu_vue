@@ -1,6 +1,11 @@
 <template>
-  <button class="g-button" :class="{[`icon-${iconPosition}`]: true}">
-    <g-icon v-if="icon" class="icon" :name="icon"></g-icon>
+  <button
+    class="g-button"
+    :class="{[`icon-${iconPosition}`]: true}"
+    @click="$emit('click')"
+  >
+    <g-icon v-if="icon && !loading" class="icon" :name="icon"></g-icon>
+    <g-icon class="loading icon" v-if="loading" name="loading"></g-icon>
     <div class="content">
       <slot></slot>
     </div>
@@ -18,12 +23,16 @@ export default {
   // props: ["icon", "iconPosition"]
   props: {
     icon: {},
+    loading: {
+      type: Boolean,
+      default: false
+    },
     iconPosition: {
       type: String,
-      default: 'left',
-      validator (value) {
+      default: "left",
+      validator(value) {
         //防止有人传过来的值，不是left或right
-        return !(value !== 'left' && value !== 'right')
+        return !(value !== "left" && value !== "right");
       }
     }
   }
@@ -31,6 +40,14 @@ export default {
 </script>
 
 <style lang="scss">
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 .g-button {
   font-size: var(--font-size);
   height: var(--button-height);
@@ -53,7 +70,7 @@ export default {
   }
   > .icon {
     order: 1;
-    margin-right: .1em;
+    margin-right: 0.1em;
   }
   > .content {
     order: 2;
@@ -62,11 +79,14 @@ export default {
     > .icon {
       order: 2;
       margin-right: 0;
-      margin-left: .1em;
+      margin-left: 0.1em;
     }
     > .content {
       order: 1;
     }
+  }
+  .loading {
+    animation: spin 2s infinite linear;
   }
 }
 </style>
